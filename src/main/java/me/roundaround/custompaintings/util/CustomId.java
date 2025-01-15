@@ -6,6 +6,9 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -18,7 +21,11 @@ public record CustomId(String pack, String resource) implements Comparable<Custo
   private static final Predicate<String> IS_VALID_ID = Pattern.compile("^(?:[^\\s:'\"]+:)?[^\\s:'\"]+$")
       .asMatchPredicate();
   private static final Predicate<String> IS_VALID_SHAPE = Pattern.compile("^(?:[^:]+:)?[^:]+$").asMatchPredicate();
-
+  public static final Codec<CustomId> CODEC = RecordCodecBuilder.create(i -> i.group(
+		  Codec.STRING.fieldOf("pack").forGetter(CustomId::pack),
+		  Codec.STRING.fieldOf("resource").forGetter(CustomId::resource)
+		  ).apply(i, CustomId::new));
+  
   @Override
   public boolean equals(Object o) {
     if (this == o)

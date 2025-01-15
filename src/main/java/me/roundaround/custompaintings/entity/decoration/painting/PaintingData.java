@@ -14,11 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 public record PaintingData(CustomId id, int width, int height, String name, String artist, boolean vanilla,
                            boolean unknown) {
   public static final PaintingData EMPTY = new PaintingData(null, 0, 0);
   public static final PacketCodec<PacketByteBuf, PaintingData> PACKET_CODEC = PacketCodec.of(
       PaintingData::write, PaintingData::read);
+  
+  public static final Codec<PaintingData> CODEC = RecordCodecBuilder.create(i -> i.group(
+		  CustomId.CODEC.fieldOf("id").forGetter(PaintingData::id),
+		  Codec.INT.fieldOf("width").forGetter(PaintingData::width),
+		  Codec.INT.fieldOf("height").forGetter(PaintingData::height),
+		  Codec.STRING.fieldOf("name").forGetter(PaintingData::name),
+		  Codec.STRING.fieldOf("artist").forGetter(PaintingData::artist),
+		  Codec.BOOL.fieldOf("vanilla").forGetter(PaintingData::vanilla),
+		  Codec.BOOL.fieldOf("unknown").forGetter(PaintingData::unknown)
+		  ).apply(i, PaintingData::new));
 
   public PaintingData(CustomId id, int width, int height) {
     this(id, width, height, "", "");

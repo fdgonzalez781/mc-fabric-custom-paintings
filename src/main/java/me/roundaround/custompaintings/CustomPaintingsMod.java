@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import me.roundaround.custompaintings.command.CustomPaintingsCommand;
 import me.roundaround.custompaintings.config.CustomPaintingsConfig;
 import me.roundaround.custompaintings.config.CustomPaintingsPerWorldConfig;
+import me.roundaround.custompaintings.entity.decoration.painting.PaintingData;
 import me.roundaround.custompaintings.network.Networking;
 import me.roundaround.custompaintings.resource.PackResource;
 import me.roundaround.custompaintings.resource.legacy.CustomPaintingsJson;
@@ -14,6 +15,8 @@ import me.roundaround.custompaintings.server.network.ServerNetworking;
 import me.roundaround.custompaintings.server.registry.ServerPaintingRegistry;
 import me.roundaround.roundalib.client.event.MinecraftServerEvents;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -21,9 +24,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +43,7 @@ public final class CustomPaintingsMod implements ModInitializer {
       .create();
   public static final String MSG_CMD_IGNORE = CustomPaintingsMod.MOD_ID + ":" + "ignore";
   public static final String MSG_CMD_OPEN_CONVERT_SCREEN = CustomPaintingsMod.MOD_ID + ":" + "openConvertScreen";
-
+  
   @Override
   public void onInitialize() {
     CustomPaintingsConfig.getInstance().init();

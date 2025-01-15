@@ -2,9 +2,12 @@ package me.roundaround.custompaintings.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
+import me.roundaround.custompaintings.CustomPaintingsMod;
 import me.roundaround.custompaintings.entity.decoration.painting.ExpandedPaintingEntity;
 import me.roundaround.custompaintings.entity.decoration.painting.PaintingData;
 import me.roundaround.custompaintings.util.CustomId;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -15,6 +18,7 @@ import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,13 +33,28 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
   @Unique
   private UUID editor = null;
   
-  private static final TrackedDataHandler<PaintingData> PAINTING_DATA = TrackedDataHandler.create(PaintingData.PACKET_CODEC);
-
-  @Unique
-  private static final TrackedData<PaintingData> CUSTOM_DATA = DataTracker.registerData(
-		  PaintingEntity.class, PAINTING_DATA
-  );
+//  private static final TrackedDataHandler<PaintingData> PAINTING_DATA = TrackedDataHandler.create(PaintingData.PACKET_CODEC);
+//
+//  @Unique
+//  private static final TrackedData<PaintingData> CUSTOM_DATA = DataTracker.registerData(
+//		  PaintingEntity.class, PAINTING_DATA
+//  );
   
+//  private static final AttachmentType<PaintingData> CUSTOM_PAINTING_DATA = AttachmentRegistry.createPersistent(
+//		  Identifier.of(CustomPaintingsMod.MOD_ID, "painting_data"),
+//		  PaintingData.CODEC
+//  );
+  
+//  private static final AttachmentType<PaintingData> CUSTOM_PAINTING_DATA = AttachmentRegistry.createDefaulted(
+//		  Identifier.of(CustomPaintingsMod.MOD_ID, "painting_data"),
+//		  () -> PaintingData.EMPTY
+//  );
+  
+  private static final AttachmentType<PaintingData> CUSTOM_PAINTING_DATA = (AttachmentRegistry.<PaintingData>builder()
+		  .initializer(() -> PaintingData.EMPTY)
+		  .persistent(PaintingData.CODEC))
+		  .buildAndRegister(Identifier.of(CustomPaintingsMod.MOD_ID, "painting_data"));
+		  
   protected PaintingEntityMixin(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
     super(entityType, world);
   }
@@ -52,8 +71,10 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
 
   @Override
   public void setCustomData(PaintingData paintingData) {
-    boolean changed = !this.dataTracker.get(CUSTOM_DATA).equals(paintingData);
-    this.dataTracker.set(CUSTOM_DATA, paintingData);
+//    boolean changed = !this.dataTracker.get(CUSTOM_DATA).equals(paintingData);
+//    this.dataTracker.set(CUSTOM_DATA, paintingData);
+	  boolean changed = !this.getAttached(CUSTOM_PAINTING_DATA).equals(paintingData);
+	  this.setAttached(CUSTOM_PAINTING_DATA, paintingData);
     if (changed) {
       this.updateAttachmentPosition();
     }
@@ -61,7 +82,8 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
 
   @Override
   public PaintingData getCustomData() {
-    return this.dataTracker.get(CUSTOM_DATA);
+//    return this.dataTracker.get(CUSTOM_DATA);
+	  return this.getAttachedOrCreate(CUSTOM_PAINTING_DATA);
   }
 
   @Override
@@ -77,9 +99,10 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
         });
   }
 
-  @Inject(method = "initDataTracker", at = @At(value = "HEAD"))
+  @Inject(method = "initDataTracker", at = @At(value = "RETURN"))
   private void addCustomDataToTracker(DataTracker.Builder builder, CallbackInfo info) {
-    builder.add(CUSTOM_DATA, PaintingData.EMPTY);
+//    builder.add(CUSTOM_DATA, PaintingData.EMPTY);
+	  this.setAttached(CUSTOM_PAINTING_DATA, PaintingData.EMPTY);
   }
 
   @Inject(method = "readCustomDataFromNbt", at = @At(value = "HEAD"))
@@ -100,8 +123,8 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
     }
     return data.toVariant();
   }
-
-  static {
-    TrackedDataHandlerRegistry.register(PAINTING_DATA);
-  }
+//
+//  static {
+//    TrackedDataHandlerRegistry.register(PAINTING_DATA);
+//  }
 }
