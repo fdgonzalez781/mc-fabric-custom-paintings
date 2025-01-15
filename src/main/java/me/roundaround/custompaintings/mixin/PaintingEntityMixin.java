@@ -27,9 +27,9 @@ import java.util.UUID;
 @Mixin(PaintingEntity.class)
 public abstract class PaintingEntityMixin extends AbstractDecorationEntity implements ExpandedPaintingEntity {
   @Unique
+<<<<<<< HEAD
   private UUID editor = null;
   
-  @Unique
   private static final TrackedDataHandler<PaintingData> PAINTING_DATA = TrackedDataHandler.create(PaintingData.PACKET_CODEC);
 
   @Unique
@@ -62,7 +62,7 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
 
   @Override
   public PaintingData getCustomData() {
-	  return this.dataTracker.get(CUSTOM_DATA);
+    return this.dataTracker.get(CUSTOM_DATA);
   }
 
   @Override
@@ -77,12 +77,12 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
           ((PaintingEntityAccessor) this).invokeSetVariant(entry);
         });
   }
-  
+
   @Inject(method = "initDataTracker", at = @At(value = "HEAD"))
   private void addCustomDataToTracker(DataTracker.Builder builder, CallbackInfo info) {
-	  builder.add(CUSTOM_DATA, PaintingData.EMPTY);
+    builder.add(CUSTOM_DATA, PaintingData.EMPTY);
   }
-  
+
   @Inject(method = "readCustomDataFromNbt", at = @At(value = "HEAD"))
   private void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo info) {
     if (nbt.contains("PaintingData", NbtElement.COMPOUND_TYPE)) {
@@ -101,8 +101,8 @@ public abstract class PaintingEntityMixin extends AbstractDecorationEntity imple
     }
     return data.toVariant();
   }
-  
+
   static {
-	  TrackedDataHandlerRegistry.register(PAINTING_DATA);
+    TrackedDataHandlerRegistry.register(PAINTING_DATA);
   }
 }
