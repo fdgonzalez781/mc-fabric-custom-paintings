@@ -27,7 +27,6 @@ import java.util.UUID;
 @Mixin(PaintingEntity.class)
 public abstract class PaintingEntityMixin extends AbstractDecorationEntity implements ExpandedPaintingEntity {
   @Unique
-<<<<<<< HEAD
   private UUID editor = null;
   
   private static final TrackedDataHandler<PaintingData> PAINTING_DATA = TrackedDataHandler.create(PaintingData.PACKET_CODEC);
