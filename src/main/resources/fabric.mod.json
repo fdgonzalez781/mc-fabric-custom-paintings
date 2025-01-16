@@ -27,7 +27,10 @@
     ],
     "modmenu": [
       "me.roundaround.custompaintings.compat.modmenu.ModMenuImpl"
-    ]
+    ],
+	"cardinal-components": [
+		"me.roundaround.custompaintings.CustomPaintingComponents"
+	]
   },
   "mixins": [
     "custompaintings.mixins.json"
@@ -37,7 +40,10 @@
       "net/minecraft/class_1534": [
         "me/roundaround/custompaintings/entity/decoration/painting/ExpandedPaintingEntity"
       ]
-    }
+    },
+	"cardinal-components": [
+		"custompaintings:painting_data"
+	]
   },
   "depends": {
     "fabric-api": "*",

@@ -231,12 +231,12 @@ public record PaintingData(CustomId id, int width, int height, String name, Stri
       return nbt;
     }
 
-    nbt.putString("Id", this.id.toString());
-    nbt.putInt("Width", this.width);
-    nbt.putInt("Height", this.height);
-    nbt.putString("Name", this.name == null ? "" : this.name);
-    nbt.putString("Artist", this.artist == null ? "" : this.artist);
-    nbt.putBoolean("Vanilla", this.vanilla);
+    nbt.putString("id", this.id.toString());
+    nbt.putInt("width", this.width);
+    nbt.putInt("height", this.height);
+    nbt.putString("name", this.name == null ? "" : this.name);
+    nbt.putString("artist", this.artist == null ? "" : this.artist);
+    nbt.putBoolean("vanilla", this.vanilla);
     return nbt;
   }
 
@@ -260,12 +260,12 @@ public record PaintingData(CustomId id, int width, int height, String name, Stri
       return EMPTY;
     }
 
-    CustomId id = CustomId.parse(nbt.getString("Id"));
-    int width = nbt.getInt("Width");
-    int height = nbt.getInt("Height");
-    String name = nbt.getString("Name");
-    String artist = nbt.getString("Artist");
-    boolean isVanilla = nbt.getBoolean("Vanilla");
+    CustomId id = CustomId.parse(nbt.getString("id"));
+    int width = nbt.getInt("width");
+    int height = nbt.getInt("height");
+    String name = nbt.getString("name");
+    String artist = nbt.getString("artist");
+    boolean isVanilla = nbt.getBoolean("vanilla");
     return new PaintingData(id, width, height, name, artist, isVanilla, false);
   }
 
